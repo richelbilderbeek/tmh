@@ -1,4 +1,17 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
-language: R
+language: r
+dist: bionic
 cache: packages
+
+r_github_packages:
+  - jimhester/covr
+  - jimhester/lintr
+  - MangoTheCat/goodpractice
+
+after_success:
+  # Lint
+  - Rscript -e 'lintr::lint_package()'
+  # Codecov
+  - Rscript -e 'covr::codecov()'
+  # Goodpractice
+  - travis_wait 60 Rscript -e 'goodpractice::gp()'
+
